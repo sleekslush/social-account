@@ -4,8 +4,8 @@ from social.models import TwitterUser
 from social.networks.oauthtwitter import OAuthApi
 
 class TwitterBackend(object):
-    CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
-    CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
+    CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY')
+    CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET')
 
     def authenticate(self, access_token):
         twitter = OAuthApi(
@@ -21,6 +21,9 @@ class TwitterBackend(object):
                 raise
             return None
         else:
+            """The twitter library returns urllib2 exceptions instead of throwing them
+            so let's handle them here
+            """
             if isinstance(user_info, Exception):
                 if settings.DEBUG:
                     raise user_info
