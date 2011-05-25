@@ -1,7 +1,6 @@
 import urllib
 from django.conf import settings
 from django.contrib.auth import authenticate, login
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
