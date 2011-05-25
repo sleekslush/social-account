@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 
 def facebook_login(request):
     params = {
-            'client_id': getattr(settings, 'FACEBOOK_APP_ID', ''),
+            'client_id': getattr(settings, 'FACEBOOK_APP_ID'),
             'redirect_uri': request.build_absolute_uri(reverse('social:facebook-login-done'))
             }
 
