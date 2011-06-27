@@ -4,9 +4,6 @@ from github2.client import Github
 from social.models import GithubUser
 
 class GithubBackend(object):
-    CLIENT_ID = getattr(settings, 'GITHUB_CLIENT_ID')
-    CLIENT_SECRET = getattr(settings, 'GITHUB_CLIENT_SECRET')
-    
     def authenticate(self, access_token):
         github = Github(access_token=access_token)
 
