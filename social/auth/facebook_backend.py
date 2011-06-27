@@ -7,8 +7,8 @@ from django.core.urlresolvers import reverse
 from social.models import FacebookUser
 
 class FacebookBackend(object):
-    FACEBOOK_APP_ID = getattr(settings, 'FACEBOOK_APP_ID', '')
-    FACEBOOK_APP_SECRET = getattr(settings, 'FACEBOOK_APP_SECRET', '')
+    FACEBOOK_APP_ID = getattr(settings, 'FACEBOOK_APP_ID')
+    FACEBOOK_APP_SECRET = getattr(settings, 'FACEBOOK_APP_SECRET')
 
     def authenticate(self, request=None):
         fb_user = None

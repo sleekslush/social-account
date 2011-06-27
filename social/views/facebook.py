@@ -1,13 +1,12 @@
 import urllib
 from django.conf import settings
 from django.contrib.auth import authenticate, login
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 def facebook_login(request):
     params = {
-            'client_id': getattr(settings, 'FACEBOOK_APP_ID', ''),
+            'client_id': getattr(settings, 'FACEBOOK_APP_ID'),
             'redirect_uri': request.build_absolute_uri(reverse('social:facebook-login-done'))
             }
 

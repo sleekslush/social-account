@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from social.networks.oauthtwitter import OAuthApi
 
-CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
-CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
+CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY')
+CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET')
 REQUEST_TOKEN_SESSION_ID = 'twitter:request_token'
 
 def twitter_login(request):

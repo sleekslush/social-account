@@ -82,9 +82,9 @@ class TwitterUserManager(models.Manager):
         return self.attach_profile(user, twitter_user)
 
     def attach_profile(self, user, twitter_user):
-        twitter_user = user.twitter_profiles.create(screen_name=twitter_user['screen_name'])
-        twitter_user.save()
-        return twitter_user
+        twitter_profile = user.twitter_profiles.create(screen_name=twitter_user['screen_name'])
+        twitter_profile.save()
+        return twitter_profile
 
 class TwitterUser(models.Model):
     user = models.ForeignKey(User, related_name='twitter_profiles')
@@ -94,3 +94,29 @@ class TwitterUser(models.Model):
 
     def __unicode__(self):
         return 'Twitter profile screen name %s' % self.screen_name
+
+class GithubUserManager(models.Manager):
+    def create_profile(self, github_user):
+        user = User(username=str(uuid.uuid1()))
+        user.first_name = github_user.name
+        user.save()
+
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.profile_thumbnail = ''
+        user_profile.save()
+
+        return self.attach_profile(user, github_user)
+
+    def attach_profile(self, user, github_user):
+        github_profile = user.github_profiles.create(login=github_user.login)
+        github_profile.save()
+        return github_profile
+
+class GithubUser(models.Model):
+    user = models.ForeignKey(User, related_name='github_profiles')
+    login = models.CharField(max_length=100, unique=True, db_index=True)
+
+    objects = GithubUserManager()
+
+    def __unicode__(self):
+        return 'Github profile login %s' % self.login
