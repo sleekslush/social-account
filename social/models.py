@@ -9,6 +9,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 
+def generate_random_username():
+    return uuid.uuid4().bytes.encode('base64').replace('/', '@').rstrip('\n=')
+
 class UserProfileView(object):
     def __init__(self, user_profile, request):
         self.user_profile = user_profile
@@ -44,7 +47,7 @@ class UserProfile(models.Model):
 
 class FacebookUserManager(models.Manager):
     def create_profile(self, fb_user):
-        user = User(username=str(uuid.uuid1()))
+        user = User(username=generate_random_username())
         user.first_name = fb_user['first_name']
         user.last_name = fb_user['last_name']
         user.save()
@@ -71,7 +74,7 @@ class FacebookUser(models.Model):
 
 class TwitterUserManager(models.Manager):
     def create_profile(self, twitter_user):
-        user = User(username=str(uuid.uuid1()))
+        user = User(username=generate_random_username())
         user.first_name = twitter_user['name']
         user.save()
 
@@ -97,7 +100,7 @@ class TwitterUser(models.Model):
 
 class GithubUserManager(models.Manager):
     def create_profile(self, github_user):
-        user = User(username=str(uuid.uuid1()))
+        user = User(username=generate_random_username())
         user.first_name = github_user.name
         user.save()
 
@@ -120,3 +123,29 @@ class GithubUser(models.Model):
 
     def __unicode__(self):
         return 'Github profile login %s' % self.login
+
+class GoogleUserManager(models.Manager):
+    def create_profile(self, google_user):
+        user = User(username=generate_random_username())
+        user.first_name = github_user.name
+        user.save()
+
+        user_profile = UserProfile.objects.get(user=user)
+        user_profile.profile_thumbnail = ''
+        user_profile.save()
+
+        return self.attach_profile(user, google_user)
+
+    def attach_profile(self, user, google_user):
+        google_profile = user.github_profiles.create(login=google_user.login)
+        google_profile.save()
+        return google_profile
+
+class GoogleUser(models.Model):
+    user = models.ForeignKey(User, related_name='google_profiles')
+    login = models.CharField(max_length=100, unique=True, db_index=True)
+
+    objects = GoogleUserManager()
+
+    def __unicode__(self):
+        return 'Google profile login %s' % self.login

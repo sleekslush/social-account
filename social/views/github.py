@@ -23,7 +23,7 @@ def github_login_done(request):
             request.GET['code'],
             request.build_absolute_uri(reverse('social:github-login-done')))
 
-    user = authenticate(gh_access_token=data.get('access_token'))
+    user = authenticate(github_access_token=data.get('access_token'))
 
     if not user:
         login_url = getattr(settings, 'LOGIN_URL', '/')

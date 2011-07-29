@@ -4,8 +4,8 @@ from github2.client import Github
 from social.models import GithubUser
 
 class GithubBackend(object):
-    def authenticate(self, gh_access_token):
-        github = Github(access_token=gh_access_token)
+    def authenticate(self, github_access_token):
+        github = Github(access_token=github_access_token)
 
         try:
             user_info = github.users.show(None)
