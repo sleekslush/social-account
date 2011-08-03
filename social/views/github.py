@@ -1,34 +1,15 @@
-import oauth2
 from django.conf import settings
-from django.contrib.auth import authenticate, login
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from social.views import OAuth2View, OAuth2LoginMixin, OAuth2CallbackMixin
 
-CLIENT_ID = getattr(settings, 'GITHUB_CLIENT_ID')
-CLIENT_SECRET = getattr(settings, 'GITHUB_CLIENT_SECRET')
-BASE_URL = 'https://github.com/login/oauth/'
+class GithubOAuthView(OAuth2View):
+    app_id = getattr(settings, 'GITHUB_CLIENT_ID')
+    app_secret = getattr(settings, 'GITHUB_CLIENT_SECRET')
+    base_url = 'https://github.com/login/oauth/'
+    callback_name = 'social:github-login-done'
+    authenticate_arg = 'github_access_token'
 
-def github_login(request):
-    client = oauth2.Client2(CLIENT_ID, CLIENT_SECRET, BASE_URL)
+class GithubLoginView(OAuth2LoginMixin, GithubOAuthView):
+    pass
 
-    authorization_url = client.authorization_url(
-            redirect_uri=request.build_absolute_uri(reverse('social:github-login-done')))
-
-    return HttpResponseRedirect(authorization_url)
-
-def github_login_done(request):
-    client = oauth2.Client2(CLIENT_ID, CLIENT_SECRET, BASE_URL)
-
-    data = client.access_token(
-            request.GET['code'],
-            request.build_absolute_uri(reverse('social:github-login-done')))
-
-    user = authenticate(github_access_token=data.get('access_token'))
-
-    if not user:
-        login_url = getattr(settings, 'LOGIN_URL', '/')
-        return HttpResponseRedirect(login_url)
-
-    login(request, user)
-
-    return HttpResponseRedirect(request.GET.get('next', '/'))
+class GithubCallbackView(OAuth2CallbackMixin, GithubOAuthView):
+    pass
