@@ -30,4 +30,4 @@ class OAuth2CallbackMixin(OAuth2View):
 
         login(request, user)
 
-        return HttpResponseRedirect(request.GET.get('next', '/'))
+        return HttpResponseRedirect(getattr(settings, 'LOGIN_SUCCESS_URL', '/'))
