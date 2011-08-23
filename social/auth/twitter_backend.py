@@ -7,12 +7,12 @@ class TwitterBackend(object):
     CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY')
     CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET')
 
-    def authenticate(self, access_token):
+    def authenticate(self, twitter_access_token):
         twitter = OAuthApi(
                 self.__class__.CONSUMER_KEY,
                 self.__class__.CONSUMER_SECRET,
-                access_token['oauth_token'],
-                access_token['oauth_token_secret'])
+                twitter_access_token['oauth_token'],
+                twitter_access_token['oauth_token_secret'])
 
         try:
             user_info = twitter.VerifyCredentials()
