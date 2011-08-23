@@ -8,15 +8,27 @@ from django.views.generic.base import View
 SOCIAL_LOGIN_SUCCESS_KEY = 'social_login_success_url'
 
 def reset_next_url(request):
+    """
+    If the view was requested with ?next=/something/, store it in the session so we can
+    redirect to it on a successful login. If ?next doesn't exist, delete any previous redirect
+    URL from the session.
+    """
     if 'next' in request.GET:
         request.session[SOCIAL_LOGIN_SUCCESS_KEY] = request.GET['next']
     else:
         delete_next_url(request.session)
 
 def get_next_url(session):
+    """
+    Returns the redirect URL from the session if it exists. Otherwise, return the URL
+    specified in settings. If all else fails, return '/'
+    """
     return session.get(SOCIAL_LOGIN_SUCCESS_KEY, getattr(settings, 'LOGIN_SUCCESS_URL', '/'))
 
 def delete_next_url(session):
+    """
+    Delete the ?next URL from session.
+    """
     try:
         del session[SOCIAL_LOGIN_SUCCESS_KEY]
     except KeyError:
