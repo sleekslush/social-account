@@ -55,4 +55,4 @@ Once the app is installed, there are a few settings you'll have to put into sett
         $ ./manage.py syncdb
 
 ## Who wrote this amazing piece of software?
-social-account is a Disorderly Zen production written by [Craig Slusher](https://github.com/sleekslush) and released under a BSD License.
+social-account is a Disorderly Zen production written by [Craig Slusher](https://github.com/sleekslush) and released under a [BSD License](http://www.opensource.org/licenses/bsd-license.php).
